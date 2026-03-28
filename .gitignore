@@ -1,0 +1,16 @@
+# Data files (too large for git)
+task2/data/QG_jets.npz
+
+# Model checkpoints
+*.pt
+
+# SLURM outputs
+*.out
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Shell scripts (SLURM)
+run_*.sh
