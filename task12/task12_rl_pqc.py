@@ -125,15 +125,16 @@ class Critic(nn.Module):
 
 def compute_reward(actions, targets):
     """
-    Reward = -MSE between PQC outputs and targets.
-    Higher reward = better embedding.
+    Per-qubit reward shaping: reward = sum of -|pred_q - target_q|^2.
+    Clearer credit assignment than single scalar MSE.
     """
     rewards = []
     for i in range(actions.shape[0]):
         exp_vals = quantum_circuit(actions[i])
         pqc_out = torch.stack(exp_vals)
-        mse = F.mse_loss(pqc_out, targets[i])
-        rewards.append(-mse.detach())
+        per_qubit_errors = (pqc_out - targets[i]) ** 2
+        reward = -per_qubit_errors.sum()
+        rewards.append(reward.detach())
     return torch.stack(rewards)
 
 
@@ -146,12 +147,11 @@ actor_optim = torch.optim.Adam(actor.parameters(), lr=3e-4)
 critic_optim = torch.optim.Adam(critic.parameters(), lr=1e-3)
 
 # PPO hyperparameters
-EPOCHS = 150
-BATCH_SIZE = 32
+EPOCHS = 2000
+BATCH_SIZE = 64
 PPO_CLIP = 0.2
-PPO_UPDATES = 4       # policy updates per epoch
-GAMMA = 0.99
-ENTROPY_COEF = 0.01
+PPO_UPDATES = 8
+ENTROPY_COEF = 0.005
 
 actor_params = sum(p.numel() for p in actor.parameters())
 critic_params = sum(p.numel() for p in critic.parameters())

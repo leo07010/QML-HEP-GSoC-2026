@@ -61,7 +61,7 @@ Same embedding task as Task XI, but trained with **Proximal Policy Optimization 
 | Method | Test MSE |
 |--------|----------|
 | Task XI (Supervised) | **0.012** |
-| Task XII (PPO) | 0.555 |
+| Task XII (PPO) | 0.543 |
 
 PPO treats the PQC as a black box (no gradient through circuit), so higher MSE is expected. RL becomes essential when circuits are non-differentiable (real hardware) or when optimizing circuit *structure* (architecture search).
 
