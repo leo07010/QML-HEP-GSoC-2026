@@ -16,6 +16,7 @@ This repository contains my solutions for the [QML-HEP Google Summer of Code 202
 | **II** | [`Task_II_Classical_GNN.ipynb`](Task_II_Classical_GNN.ipynb) | GNN-based Quark/Gluon jet classification |
 | **III** | [`Task_III_Open_Task.ipynb`](Task_III_Open_Task.ipynb) | Reflections on QML — honest observations and a path forward |
 | **XI** | [`Task_XI_MLP_PQC.ipynb`](Task_XI_MLP_PQC.ipynb) | MLP + Parameterized Quantum Circuit embedding |
+| **XII** | [`Task_XII_RL_PQC.ipynb`](Task_XII_RL_PQC.ipynb) | RL (PPO) + PQC embedding |
 
 ---
 
@@ -49,13 +50,29 @@ Hybrid classical-quantum model that maps normally distributed input to quantum s
 - **Loss:** MSE between predicted and target ⟨Z⟩ expectation values
 - **Final Test MSE:** 0.012
 
+## Task XII: RL (PPO) + PQC Embedding
+
+Same embedding task as Task XI, but trained with **Proximal Policy Optimization (PPO)** instead of supervised backpropagation:
+
+- **State:** input vector (dim=8) | **Action:** PQC rotation angles (dim=30) | **Reward:** -MSE
+- **Actor:** 8 → 64 → 64 → 30 (Gaussian policy)
+- **Critic:** 8 → 64 → 64 → 1 (value function)
+
+| Method | Test MSE |
+|--------|----------|
+| Task XI (Supervised) | **0.012** |
+| Task XII (PPO) | 0.555 |
+
+PPO treats the PQC as a black box (no gradient through circuit), so higher MSE is expected. RL becomes essential when circuits are non-differentiable (real hardware) or when optimizing circuit *structure* (architecture search).
+
 ---
 
 ## Environment
 
 - **Framework:** PyTorch 2.6, PennyLane 0.38, Cirq 1.3, PyG 2.6
-- **Hardware:** NVIDIA GPUs via SLURM (TWCC HPC)
+- **Hardware:** NVIDIA H200 GPUs via SLURM (TWCC HPC)
 - **Python:** 3.9
+- **Code Quality:** [Claude Code](https://claude.ai/claude-code) was used to assist with code documentation and annotations
 
 ## Repository Structure
 
@@ -65,8 +82,10 @@ Hybrid classical-quantum model that maps normally distributed input to quantum s
 ├── Task_II_Classical_GNN.ipynb       # GNN jet classification
 ├── Task_III_Open_Task.ipynb          # Open task — QML reflections
 ├── Task_XI_MLP_PQC.ipynb             # Hybrid MLP + PQC embedding
+├── Task_XII_RL_PQC.ipynb             # RL (PPO) + PQC embedding
 ├── task1/                            # Task I source code & outputs
 ├── task2/                            # Task II source code, data & models
 │   └── data/QG_jets.npz
-└── task11/                           # Task XI source code & outputs
+├── task11/                           # Task XI source code & outputs
+└── task12/                           # Task XII source code & outputs
 ```
