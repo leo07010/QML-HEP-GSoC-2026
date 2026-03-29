@@ -7,6 +7,7 @@ This repository contains my solutions for the [QML-HEP Google Summer of Code 202
 - Q-MAML — Quantum Model-Agnostic Meta-Learning for Variational Quantum Algorithms for HEP Analysis at the LHC
 - Quantum Reinforcement Learning for High Energy Physics
 - Automated Scientific Discovery of Quantum Machine Learning Architectures
+- Quantum Circuit Design with LLMs
 
 ## Completed Tasks
 
@@ -17,6 +18,7 @@ This repository contains my solutions for the [QML-HEP Google Summer of Code 202
 | **III** | [`Task_III_Open_Task.ipynb`](Task_III_Open_Task.ipynb) | Reflections on QML — honest observations and a path forward |
 | **XI** | [`Task_XI_MLP_PQC.ipynb`](Task_XI_MLP_PQC.ipynb) | MLP + Parameterized Quantum Circuit embedding |
 | **XII** | [`Task_XII_RL_PQC.ipynb`](Task_XII_RL_PQC.ipynb) | RL (PPO) + PQC embedding |
+| **QCD** | [`Task_QCD_Quantum_Circuit_Design_LLM.ipynb`](Task_QCD_Quantum_Circuit_Design_LLM.ipynb) | Agentic quantum circuit design with LLMs (Orchestral AI + Gemini) |
 
 ---
 
@@ -65,11 +67,21 @@ Same embedding task as Task XI, but trained with **Proximal Policy Optimization 
 
 PPO treats the PQC as a black box (no gradient through circuit), so higher MSE is expected. RL becomes essential when circuits are non-differentiable (real hardware) or when optimizing circuit *structure* (architecture search).
 
+## Task QCD: Quantum Circuit Design with LLMs
+
+Agentic framework using **Orchestral AI + Google Gemini 2.5 Flash** for autonomous quantum circuit design. Three sub-tasks:
+
+| Sub-Task | Description | Key Result |
+|----------|-------------|-----------|
+| **1. Hello World** | 4 quantum tools (`hilbert_dim`, `describe_quantum_gate`, `generate_circuit_code`, `estimate_circuit_resources`) | All tools reliably called, multi-call success |
+| **2. QNN Training** | Hybrid QNN (784→64→4-qubit VQC→10) training wrapped as agent tool | Agent analyzed learning curves and compared configs |
+| **3. Agent HPO** | Agent autonomously optimizes learning rate over 6 trials | Found optimal lr=0.0075 (40.5% test acc) via explore-then-exploit |
+
 ---
 
 ## Environment
 
-- **Framework:** PyTorch 2.6, PennyLane 0.38, Cirq 1.3, PyG 2.6
+- **Framework:** PyTorch 2.6+, PennyLane 0.38+, Cirq 1.3, PyG 2.6, Orchestral AI 1.3
 - **Hardware:** NVIDIA H200 GPUs via SLURM (TWCC HPC)
 - **Python:** 3.9
 - **Code Quality:** [Claude Code](https://claude.ai/claude-code) was used to assist with code documentation and annotations
@@ -83,6 +95,7 @@ PPO treats the PQC as a black box (no gradient through circuit), so higher MSE i
 ├── Task_III_Open_Task.ipynb          # Open task — QML reflections
 ├── Task_XI_MLP_PQC.ipynb             # Hybrid MLP + PQC embedding
 ├── Task_XII_RL_PQC.ipynb             # RL (PPO) + PQC embedding
+├── Task_QCD_Quantum_Circuit_Design_LLM.ipynb  # Agentic circuit design with LLMs
 ├── task1/                            # Task I source code & outputs
 ├── task2/                            # Task II source code, data & models
 │   └── data/QG_jets.npz
